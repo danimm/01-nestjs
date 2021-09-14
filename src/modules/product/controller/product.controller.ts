@@ -1,8 +1,8 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
-import { PaginateParams } from '../../types/PaginateParams';
+import { Controller, Get, Query, Param } from '@nestjs/common';
+import { PaginateParams } from '../types/PaginateParams';
 
 @Controller('products')
-export class ProductsController {
+export class ProductController {
   @Get('filter')
   getProductFilter() {
     return `Filtrando productos`;
@@ -15,7 +15,7 @@ export class ProductsController {
 
   @Get()
   getProducts(@Query() params: PaginateParams) {
-    const { limit, offset } = params;
+    const { limit = 100, offset = 50 } = params;
     return `Products: limit => ${limit} offset=> ${offset}`;
   }
 }
