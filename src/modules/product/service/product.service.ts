@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, HttpStatus } from '@nestjs/common';
 import { Product } from '../../../entitites/product.entity';
 import { nanoid } from 'nanoid';
 @Injectable()
@@ -21,10 +21,12 @@ export class ProductService {
   findOne(id: string): Product {
     const product = this.products.find((product) => product.id == id);
     if (!product) {
-      throw new Error('Producto no encontrado');
-    } else {
-      return this.products.find((product) => product.id == id);
+      throw new NotFoundException({
+        error: `Product #${id} not found`,
+        status: HttpStatus.NOT_FOUND,
+      });
     }
+    return product;
   }
 
   create(payload: Product): Product {
@@ -38,10 +40,10 @@ export class ProductService {
     const index = this.products.findIndex((product) => product.id == id);
 
     if (index < 0) {
-      throw {
-        message: `El product con id: ${id} no existe en la base de datos`,
-        result: index,
-      };
+      throw new NotFoundException({
+        error: `El product con id: ${id} no existe en la base de datos`,
+        status: HttpStatus.NOT_FOUND,
+      });
     } else {
       const product = this.findOne(id);
       this.products[index] = {
@@ -58,7 +60,10 @@ export class ProductService {
     );
 
     if (selectedProduct < 0) {
-      throw new Error(`El product con id: ${id} no existe en la base de datos`);
+      throw new NotFoundException({
+        error: `El product con id: ${id} no existe en la base de datos`,
+        status: HttpStatus.NOT_FOUND,
+      });
     } else {
       this.products.splice(selectedProduct, 1);
       return { message: 'Producto borrado correctamente' };
