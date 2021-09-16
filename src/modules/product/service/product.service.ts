@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, HttpStatus } from '@nestjs/common';
-import { Product } from '../../../entitites/product.entity';
+import { Product } from 'src/entitites/product.entity';
 import { nanoid } from 'nanoid';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dtos';
 @Injectable()
 export class ProductService {
   private products: Product[] = [
@@ -18,7 +19,7 @@ export class ProductService {
     return this.products;
   }
 
-  findOne(id: string): Product {
+  findOne(id: string) {
     const product = this.products.find((product) => product.id == id);
     if (!product) {
       throw new NotFoundException({
@@ -29,14 +30,14 @@ export class ProductService {
     return product;
   }
 
-  create(payload: Product): Product {
-    const newProduct = { id: nanoid(), ...payload };
+  create(payload: CreateProductDto) {
+    const newProduct: Product = { id: nanoid(), ...payload };
 
     this.products.push(newProduct);
     return newProduct;
   }
 
-  update(id: string, payload: Product) {
+  update(id: string, payload: UpdateProductDto) {
     const index = this.products.findIndex((product) => product.id == id);
 
     if (index < 0) {
@@ -44,14 +45,14 @@ export class ProductService {
         error: `El product con id: ${id} no existe en la base de datos`,
         status: HttpStatus.NOT_FOUND,
       });
-    } else {
-      const product = this.findOne(id);
-      this.products[index] = {
-        ...product,
-        ...payload,
-      };
-      return { message: 'Producto actualizado correctamente.' };
     }
+
+    const product = this.findOne(id);
+    this.products[index] = {
+      ...product,
+      ...payload,
+    };
+    return { message: 'Producto actualizado correctamente.' };
   }
 
   delete(id: string) {
@@ -64,9 +65,9 @@ export class ProductService {
         error: `El product con id: ${id} no existe en la base de datos`,
         status: HttpStatus.NOT_FOUND,
       });
-    } else {
-      this.products.splice(selectedProduct, 1);
-      return { message: 'Producto borrado correctamente' };
     }
+
+    this.products.splice(selectedProduct, 1);
+    return { message: 'Producto borrado correctamente' };
   }
 }

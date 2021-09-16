@@ -9,8 +9,8 @@ import {
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
-import { ProductService } from '../service/product.service';
-import { Product } from 'src/entitites/product.entity';
+import { ProductService } from 'src/modules/product/service/product.service';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dtos';
 
 @Controller('products')
 export class ProductController {
@@ -18,6 +18,8 @@ export class ProductController {
 
   @Get('filter')
   getProductFilter() {
+    // Cuando tenemos una ruta fija y también una con un valor dinámico
+    // la ruta fija debe ir definida antes de la del valor dinámico como ocurre en este caso
     return { message: `Filtrando productos` };
   }
 
@@ -33,12 +35,12 @@ export class ProductController {
   }
 
   @Post()
-  create(@Body() payload: Product) {
+  create(@Body() payload: CreateProductDto) {
     return this.productService.create(payload);
   }
 
   @Put(':id')
-  updated(@Param('id') id: string, @Body() payload: Product) {
+  updated(@Param('id') id: string, @Body() payload: UpdateProductDto) {
     return this.productService.update(id, payload);
   }
 
