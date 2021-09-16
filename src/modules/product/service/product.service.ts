@@ -32,7 +32,6 @@ export class ProductService {
 
   create(payload: CreateProductDto) {
     const newProduct: Product = { id: nanoid(), ...payload };
-
     this.products.push(newProduct);
     return newProduct;
   }
