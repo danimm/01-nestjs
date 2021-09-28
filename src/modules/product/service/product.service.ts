@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, HttpStatus } from '@nestjs/common';
 import { Product } from 'src/entitites/product.entity';
 import { nanoid } from 'nanoid';
-import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dtos';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/product.dtos';
 @Injectable()
 export class ProductService {
   private products: Product[] = [

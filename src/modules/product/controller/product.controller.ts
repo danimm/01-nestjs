@@ -10,7 +10,7 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { ProductService } from 'src/modules/product/service/product.service';
-import { CreateProductDto, UpdateProductDto } from 'src/dtos/products.dtos';
+import { CreateProductDto, UpdateProductDto } from 'src/dtos/product.dtos';
 
 @Controller('products')
 export class ProductController {
